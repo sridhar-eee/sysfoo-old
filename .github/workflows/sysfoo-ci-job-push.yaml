@@ -1,0 +1,33 @@
+name:  sysfoo-ci-pipeline-push
+on:
+  push:
+    branches:
+      - 'master'
+jobs:
+  sysfoo-ci-job:
+    runs-on:
+      - ubuntu-latest
+    steps:
+      - name: hello-world
+        run: echo "Welcome to SYSFOO"
+        
+      - name: Code Checkout
+        uses: actions/checkout@v6.0.1
+        
+      - name: Test
+        run: mvn test
+        
+      - name: Clean Package
+        run: mvn clean
+        
+      - name: Package
+        run: mvn package
+
+      - name: lsit files
+        run: ls -lrt target
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v6.0.0
+        with:
+          name: sysfoo-push
+          path:  target/**.war
